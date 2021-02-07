@@ -55,8 +55,26 @@
  * File: main.cpp
  *
  *  Created on: 14 feb 2019
- *      Author: Stefano
+ *      Author: Stefano Ampolo
  */
+
+
+//------- COMPILING SETTINGS ----------//
+
+//#define WINDOWS
+//#define LINUX
+
+#define BAREMETAL  //ST's HAL LIBRARIES
+//#define ARDUPILOT
+//#define FREERTOS
+//#define CHIBIOS
+
+//#define UNIT_TESTING
+
+//------- ------- ------- ------ ----- //
+
+
+
 
 #include <stdlib.h>
 #include <cstdlib>
@@ -68,78 +86,89 @@
 #include <ctime>
 #include <limits.h>
 
-#include "finiteStateMachine.h"
-#include "GpiosAndFunctions.h"
+#include "1_Hardware&Drivers.hpp"
+#include "2_Threads&Handlers.hpp"
+#include "3_Application&FSM.hpp"
 
 using namespace std;
 
+//#define CHIBIOS
+#define FREERTOS
+#define UNIT_TESTING
 
 
 //void FSM();
 
 
-//  This part of the code is needed to create the wait function
-void wait ( int seconds ){
-	clock_t endwait;
-	endwait = clock () + seconds * CLOCKS_PER_SEC ;
-	while (clock() < endwait) {}
-}
-
-
 void print_SystemTime();
 
 ///////////////////////////////////////////
-// // //   GLOBAL STATE VARIABLE   // // //
+// // //   GLOBAL STATE VARIABLEs  // // //
 ///////////////////////////////////////////
-clock_t startTime;
-double deltaTime;
 
-finiteStateMachine fsm;
+clock_t startTime;
+float deltaTime;
+
+finiteStateMachine fsm; // Finite State Machine definition
+
+
 
 int main() {
 
 	cout << " - The FEES System has Started - " << endl << endl;
-	startTime = clock();
 
-	fsm.print_StateList();
-	fsm.print_Menu();
+	startTime = clock(); // Samples the start time (needed to calculate the SystemTime)
+
+	fsm.print_StateList(); 	// Prints out the State list of the FEES System
+	fsm.print_Menu();		// Prints out the User-Menu for keyboard Control over the System
+
 	cout << endl;
 
-	cin.get();
-
-	thread threadFSM(thread_Fsm); // Gestisce la macchina a stati (E la PinMask)
-
-	thread threadUserShell(thread_UserShell); // Gestisce l'output a stampa su schermo
+	cin.get(); 	// Keyboard Sampling
 
 
-	//ThreadS che gestiscono le funzioni di sistema
+	//System Threads
 
-	thread threadADCS( thread_ADCS);
-	thread threadBatteryPID( thread_BatteryPID);
-	thread threadHardwareWD( thread_HardwareWD);
-	thread threadTransmissionWD(thread_TransmissionWD);
+	thread threadADCS( thread_ADCS);		// Thread for Attitude Determination and Control System.
+	thread threadBatteryPID( thread_BatteryPID);	// Thread for Battery thermal management (PID control)
+	thread threadHardwareWD( thread_HardwareWD);	// Thread for cyclical reset of the Hardware Watchdog
+	thread threadTransmissionWD(thread_TransmissionWD);	// Thread for cyclical sending of the Radio Ping ( Space law requirement)
+
+	thread threadFSM(thread_Fsm); // This thread Handles the FiniteStateMachine and the Pinmask - it Handles the full Housekeeping of the Satellite.
+
+	// User - Testing Threads
+
+	thread threadUserShell(thread_UserShell); // This tread handles the output on screen (PC)
 
 
-	    while(1){
-			cout << "--> Dai un comando - Esegui un evento: " << endl << endl;
-			int input;
-			cin >> input;
 
-			while (!cin.good())
-				{
-			    cin.clear();
-			    cin.ignore(INT_MAX, '\n');
-			    cout << " Non e' stato inserito un valore corretto! (int)" << endl << flush ;
-			    cout << "Esegui un evento: " << endl;
-			    cin >> input;
-				}
-			fsm.human_event_Handler(input);
+	while(1)
+		{
+		cout << "--> Dai un comando - Esegui un evento: " << endl << endl;
+		int input;
+		cin >> input;
+		while (!cin.good())
+			{
+		    cin.clear();
+		    cin.ignore(INT_MAX, '\n');
+		    cout << " Non e' stato inserito un valore corretto! (int)" << endl << flush ;
+		    cout << "Esegui un evento: " << endl;
+		    cin >> input;
+			}
+		fsm.human_event_Handler(input);
 	    }
 }
 
 
+// end main
 
-// Thread for FiniteStateMachine Handling Creation
+
+
+
+
+
+
+// Thread for FiniteStateMachine update-handling
 void thread_Fsm(){ // 1Hz Thread loop
 	while(1){
     	fsm.event_Handler();
@@ -148,32 +177,37 @@ void thread_Fsm(){ // 1Hz Thread loop
 	}
 }
 
+
 // Thread for user Screen Visualization
 void thread_UserShell(){ // 24hrz Thread loop
-	while(1){
-		//th.lock
+	while(1)
+		{
 		print_SystemTime();
     	fsm.print_State();
     	fsm.print_Variables();
     	print_ThreadsAndManagers();
 		print_PinMask();
 
-		cout << endl;
 		fsm.print_Menu();
-		//th.lock
-		// Sleep this thread for 1000 MilliSeconds (to time all 1 second)
-		std::this_thread::sleep_for(std::chrono::milliseconds(50)); //1000
+		// Sleep this thread for 500 MilliSeconds
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000)); //1000
 
+
+#ifdef WINDOWS
 		system("CLS");
+#endif // WINDOWS
+
+#ifdef LINUX
+		std::system("clear");
+#endif // LINUX
 
 	}
 }
 
 
 
-
 void print_SystemTime(){
-	deltaTime = ( std::clock() - startTime ) / (double) CLOCKS_PER_SEC;
-	cout << "  System Time is:  "<< deltaTime << endl;
+	deltaTime = (( std::clock() - startTime )) / (float) CLOCKS_PER_SEC;
+	cout << "\r  System Time is:  "<< deltaTime << endl;
 }
 
