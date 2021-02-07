@@ -1,0 +1,61 @@
+/*********************************************************************************
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *												   							 	 *
+ *	 ______  ______  ______   _____ 										 	 *
+ *	|  ____||  ____||  ____| / ____|										 	 *
+ *	| |__   | |__   | |__   | (___  										 	 *
+ *	|  __|  |  __|  |  __|   \___ \ 											 *
+ *	| |     | |____ | |____  ____) |		|)     . _  _|- |				 	 *
+ *	|_|     |______||______||_____/ 		| |`() |(/_(_|_ .				 	 *
+ *    									    |     _|         				 	 *
+ *												   							 	 *
+ *      ____    ___     __      ___    ___    __  ___ __       ___   ___       	 *
+ *      |__ |   |__ \_/||__)|   |__    |__ \_/|__)|__ |__)||\/||__ |\ || /\ |    *
+ *      |   |___|___/ \||__)|___|___   |___/ \|   |___|  \||  ||___| \||/~~\|___ *
+ *                 ___     __  ___ __  __  ___ __     __     ________        	 *
+ *                |__ |\/||__)|__ |  \|  \|__ |  \   /__`\ //__`||__ |\/|    	 *
+ *                |___|  ||__)|___|__/|__/|___|__/   .__/ | .__/||___|  |    	 *
+ *                                                                           	 *
+ *											  							     	 *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *															   				     *
+ *												   								 *
+ *								FEES Project 					         		 *
+ *		    URL: https://github.com/ferrandi/DEIB-DAER-project		             *
+ *				 		Politecnico di Milano - DEIB                             *
+ *			    			   Stefano Ampolo 				                     *
+ *		   ***********************************************************           *
+ *             		Copyright (c) 2018-2019 Politecnico di Milano				 *
+ *                                                                               *
+ *   This file is part of the FEES Project.                                      *
+ *                                                                               *
+ *   The FEES framework is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published           *
+ *   the Free Software Foundation; either version 3 of the License,              *
+ *   (at your option) any later                                                  *
+ *                                                                               *
+ *   This program is distributed in the hope that it will be useful,             *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty                 *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See                   *
+ *   GNU General Public License for more                                         *
+ *                                                                               *
+ *   You should have received a copy of the GNU General Public License           *
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.       *
+ *                                                                               *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+ */
+/**
+ * @file  Hwdef-bl.bat
+ * @brief This file describes the hardware portlist of the STM32F407VGT6
+ *			needed for the Bootloader to work properly.
+ * @author Stefano Ampolo
+ * @date 	 05/03/2019
+ * $Revision$
+ * $Date$
+ * Last modified by
+ *
+ *
+*/
+/*  Made by STAMP     */
+

@@ -1,0 +1,40 @@
+ARDUCOPTER COMPILING INSTRUCTIONS
+
+./waf clean
+./waf distclean
+./waf configure --board VRBrain-v52
+./waf --targets bin/arducopter
+
+
+For FEES - bootloader:
+
+./waf clean
+./waf distclean
+./waf configure --board FEES_REV_D --bootloader
+./waf clean
+./waf bootloader
+
+For FEES:
+
+./waf clean
+./waf distclean
+./waf configure --board FEES_REV_D
+
+
+?? ./waf 
+?? ./waf copter
+
+
+
+
+
+
+
+
+
+////
+./waf --targets bin/arducopter --update    
+//// This last command is to download the firmware to the usb board.
+
+
+

@@ -1,0 +1,261 @@
+/*********************************************************************************
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *												   							 	 *
+ *	 ______  ______  ______   _____ 										 	 *
+ *	|  ____||  ____||  ____| / ____|										 	 *
+ *	| |__   | |__   | |__   | (___  										 	 *
+ *	|  __|  |  __|  |  __|   \___ \ 											 *
+ *	| |     | |____ | |____  ____) |		|)     . _  _|- |				 	 *
+ *	|_|     |______||______||_____/ 		| |`() |(/_(_|_ .				 	 *
+ *    									    |     _|         				 	 *
+ *												   							 	 *
+ *      ____    ___     __      ___    ___    __  ___ __       ___   ___       	 *
+ *      |__ |   |__ \_/||__)|   |__    |__ \_/|__)|__ |__)||\/||__ |\ || /\ |    *
+ *      |   |___|___/ \||__)|___|___   |___/ \|   |___|  \||  ||___| \||/~~\|___ *
+ *                 ___     __  ___ __  __  ___ __     __     ________        	 *
+ *                |__ |\/||__)|__ |  \|  \|__ |  \   /__`\ //__`||__ |\/|    	 *
+ *                |___|  ||__)|___|__/|__/|___|__/   .__/ | .__/||___|  |    	 *
+ *                                                                           	 *
+ *											  							     	 *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *															   				     *
+ *												   								 *
+ *								FEES Project 					         		 *
+ *		    URL: https://github.com/ferrandi/DEIB-DAER-project		             *
+ *				 		Politecnico di Milano - DEIB                             *
+ *			    			   Stefano Ampolo 				                     *
+ *		   ***********************************************************           *
+ *             		Copyright (c) 2018-2019 Politecnico di Milano				 *
+ *                                                                               *
+ *   This file is part of the FEES Project.                                      *
+ *                                                                               *
+ *   The FEES framework is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published           *
+ *   the Free Software Foundation; either version 3 of the License,              *
+ *   (at your option) any later                                                  *
+ *                                                                               *
+ *   This program is distributed in the hope that it will be useful,             *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty                 *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See                   *
+ *   GNU General Public License for more                                         *
+ *                                                                               *
+ *   You should have received a copy of the GNU General Public License           *
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.       *
+ *                                                                               *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+ */
+/**
+ * @file  main.cc
+ * @brief This is the main file
+ * @author Stefano Ampolo
+ * @date 
+ * $Revision$
+ * $Date$
+ * Last modified by
+ *
+ *
+*/
+/*  Made by STAMP     */
+
+
+/*	 This File is Part of the FEES Enviroement	 */
+
+
+
+
+
+# hw definition file for processing by chibios_hwdef.py
+# for FEES_REV_D hardware - the 1/3 cubesat Project
+
+#Questo define serve solo a dare un codice all'hardware.
+#Queste definizioni sono all'interno di ardupilot/libraries/AP_HAL/board/AP_HAL_Boards.h
+
+define CONFIG_HAL_BOARD_SUBTYPE HAL_BOARD_SUBTYPE_CHIBIOS_VRBRAIN_V52
+
+
+# MCU class and specific type
+MCU STM32F4xx STM32F407xx
+
+# board ID for firmware load
+APJ_BOARD_ID 1152
+
+# crystal frequency
+OSCILLATOR_HZ 8000000
+STM32_PLLM_VALUE 8
+
+# flash size
+FLASH_SIZE_KB 1024
+
+# board voltage
+STM32_VDD 330U
+
+# USB setup
+USB_VENDOR 0x27AC
+USB_PRODUCT 0x1152
+USB_STRING_MANUFACTURER "Polimi - GPAdvancedProject - Laser Navigation"
+USB_STRING_SERIAL  "%SERIAL%"
+
+# ChibiOS system timer
+STM32_ST_USE_TIMER 5
+
+# only one I2C bus
+I2C_ORDER I2C2 I2C1
+
+# order of UARTs (and USB)
+UART_ORDER OTG1 USART1 USART3 USART2
+STDOUT_SERIAL SD3
+STDOUT_BAUDRATE 57600
+
+
+ PA0  TIM2_CH1 TIM2 PWM(1) 	GPIO(11)
+ PA1  TIM2_CH2 TIM2 PWM(2)  GPIO(12)
+ PA2  TIM2_CH3 TIM2 PWM(3)  GPIO(13)
+ PA3  BUZZER OUTPUT LOW GPIO(32)
+ PA4  CS_RADFET CS
+ PA5  SPI1_SCK SPI1
+ PA6  SPI1_MISO SPI1
+ PA7  SPI1_MOSI SPI1
+ PA8  PGOOD INPUT 
+ PA9  VBUS INPUT
+ PA10 EX_GPIO_4 OUTPUT LOW GPIO(33)
+ PA11 OTG_FS_DM OTG1
+ PA12 OTG_FS_DP OTG1
+ PA13 JTMS-SWDIO SWD
+ PA14 JTCK-SWCLK SWD
+#PA15
+
+ PB0  RSBY_KEEP_EN OUTPUT LOW GPIO(4)
+ PB1  EX_GPIO1 OUTPUT LOW GPIO(30)
+#PB2
+#PB3
+#PB4
+ PB5  WATCHDOG OUTPUT LOW GPIO(20)
+ PB6  USART1_TX USART1
+ PB7  USART1_RX USART1
+ PB8  I2C1_SCL I2C1
+ PB9  I2C1_SDA I2C1
+ PB10 I2C2_SCL I2C2
+ PB11 I2C2_SDA I2C2
+ PB12 EX_GPIO2 OUTPUT LOW GPIO(31)
+ PB13 SPI2_SCK SPI2
+ PB14 SPI2_MISO SPI2
+ PB15 SPI2_MOSI SPI2
+
+
+ #PC0  PSD1_SEL_1 OUTPUT LOW GPIO(8)
+ #PC1  PSD1_SEL_0 OUTPUT LOW GPIO(7)
+ 
+ PC0  BATT_VOLTAGE_SENS ADC1
+ PC1  BATT_CURRENT_SENS ADC1
+
+ PC2  PSD2_SEL_1 OUTPUT LOW GPIO(10)
+ PC3  PSD2_SEL_0 OUTPUT LOW GPIO(9)
+ PC4  PSD1_AMP_CS CS
+ PC5  PSD2_AMP_CS CS
+ PC6  SDR_SER_TX USART6
+ PC7  SDR_SER_RX USART6
+ PC8  TIM8_CH3 TIM8 PWM(4)  GPIO(14)
+ PC9  EX_SPI_EN CS
+ PC10 SPI3_SCK SPI3
+ PC11 SPI3_MISO SPI3
+ PC12 SPI3_MOSI SPI3
+ PC13 UHF_RESET OUTPUT HIGH GPIO(0)
+ PC14 RADFET_OWB OUTPUT LOW GPIO(18)
+ PC15 RAD_RESET OUTPUT HIGH GPIO(6)
+
+ PD0  SBD_SER_DCD OUTPUT LOW GPIO(21)
+ PD1  SBD_SER_DSR OUTPUT LOW GPIO(22)
+ PD2  SBD_SER_DTR OUTPUT LOW GPIO(23)
+ PD3  SBD_SER_CTS OUTPUT LOW GPIO(24)
+ PD4  SBD_SER_RTS OUTPUT LOW GPIO(25)
+ PD5  USART2_TX USART2
+ PD6  USART2_RX USART2
+ PD7  SDB_ON_OFF OUTPUT LOW GPIO(26)
+ PD8  USART3_TX USART3
+ PD9  USART3_RX USART3
+ PD10 CS_EEPROM CS
+ PD11 CS_FRAM CS
+ PD12 TMTC_MCU_WD OUTPUT LOW GPIO(19)
+ *PD13 INT_GYRO
+ PD14 CS_GYRO2 CS
+ *PD15 INT_GYRO2
+
+ PE0  ANA_PWR_ON OUTPUT LOW GPIO(2)
+ PE1  RAD_PWR_ON OUTPUT LOW GPIO(5)
+ PE2  GPS_PWR_ON OUTPUT LOW GPIO(1)
+ PE3  SBD_PWR_ON OUTPUT LOW GPIO(29)
+ PE4  CS_NAND CS
+ PE5  LORA_CS CS
+ PE6  RASBY_ON OUTPUT LOW GPIO(3)
+ PE7  DIR_X_COIL OUTPUT LOW GPIO(15)
+ PE8  DIR_Y_COIL OUTPUT LOW GPIO(16)
+ PE9  DIR_Z_COIL OUTPUT LOW GPIO(17)
+ PE10 CS_GYRO CS
+ PE11 EN_ADC1 CS
+ PE12 EN_ADC2 CS
+ PE13 EN_ADC3 CS
+ PE14 SBD_SER_RI OUTPUT LOW GPIO(27)
+ PE15 SBD_SER_NET OUTPUT LOW GPIO(28)
+
+
+#PORTLIST FINO A QUI COMPLETA //////
+
+
+# SPI device table. The DEVID values are chosen to match the PX4 port
+# of ArduPilot so users don't need to re-do their accel and compass calibrations
+# when moving to ChibiOS
+
+#SPI1
+SPIDEV mpu9250_1	SPI1 DEVID1  CS_GYRO2   MODE3   4*MHZ   8*MHZ
+#SPIDEV mt29f2g01	SPI1 DEVID48 CS_NAND	MODE3	40*MHZ	83*MHZ
+#SPIDEV adc128s02	SPI1 DEVID3  EN_ADC1	MODE3	1.6*MHZ 3.2*MHZ
+#SPIDEV adc128s02	SPI1 DEVID4  EN_ADC2	MODE3	1.6*MHZ 3.2*MHZ
+#SPIDEV adc128s02	SPI1 DEVID5  EN_ADC3	MODE3	1.6*MHZ 3.2*MHZ
+#SPIDEV ad5271
+
+#SPI2
+SPIDEV mpu9250		SPI2 DEVID4   CS_GYRO    MODE3  4*MHZ   8*MHZ
+SPIDEV ramtron		SPI2 DEVID49  CS_FRAM 	 MODE3	30*MHZ	40*MHZ 
+#SPIDEV LinkitLora
+
+#SPI3
+#SPIDEV m95m02  SPI3  DEVID50  CS_EEPROM  MODE3  5*MHZ  10*MHZ
+
+
+
+#TBCompleted
+
+define HAL_CHIBIOS_ARCH_BRAINV52 1 
+# In futuro sara' define HAL_CHIBIOS_ARCH_FEES_REV_D 1
+
+define HAL_BOARD_LOG_DIRECTORY "/APM/LOGS"
+define HAL_BOARD_TERRAIN_DIRECTORY "/APM/TERRAIN"
+
+define HAL_STORAGE_SIZE   16384
+#define STORAGE_FLASH_PAGE 22
+
+# enable RAMTROM parameter storage
+define HAL_WITH_RAMTRON 1
+
+# enable FAT filesystem
+define HAL_OS_FATFS_IO 0
+
+define HAL_GPIO_LED_ON  0
+define HAL_GPIO_LED_OFF 1
+
+define HAL_BUZZER_PIN	3
+define HAL_BUZZER_ON 	1
+define HAL_BUZZER_OFF	0
+
+
+# battery setup
+define HAL_BATT_VOLT_PIN 10
+define HAL_BATT_CURR_PIN 11
+define HAL_BATT_VOLT_SCALE 10.1
+define HAL_BATT_CURR_SCALE 17.0
+
+define STM32_PWM_USE_ADVANCED TRUE
+
+# 12 PWM available by default
+define BOARD_PWM_COUNT_DEFAULT 12
