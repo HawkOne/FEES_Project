@@ -1,0 +1,8 @@
+
+
+All'accensione del sistema potremmo o no avere una memoria dell'esecuzione precedente, ma in ogni caso dobbiamo sempre considerare la memoria come non affidabile lavorando in un ambiente ad alta concentrazione di radiazioni ionizzanti.
+Al fine di aumentare l'affidabilitá della memoria viene quindi adottata una ridondanza tripla della memoria critica su tre diverse memorie fisiche in modo da poter conservare con ottima attendibilitá lo stato precedente ed i dati critici : ovvero i flags dell'esecuzione precedente ed il conteggio precedente dei timers.
+Quindi all'avvio oltre che recuperare la memoria critica e fare la comparazione delle tre memorie (con l'accettazione di dati solamente nel caso in cui ci sia ridondanza maggiore-uguale a 2 ) sulle variabili critiche  verrá anche fatto un check per considerare se lo stato precedente registrato é congruo con le variabili critiche (Flags e Timers e campionamento dello Switch Meccanico (unico 'sensore' trigger di un cambio di stato)).
+
+
+
