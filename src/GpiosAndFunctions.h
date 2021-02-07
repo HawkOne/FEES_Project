@@ -52,128 +52,118 @@
  *                                                                                                 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- * File: main.cpp
+ * FILE:Pinmask.h
  *
- *  Created on: 14 feb 2019
+ *  Created on: 14 mar 2019
  *      Author: Stefano
  */
 
-#include <stdlib.h>
-#include <cstdlib>
-#include <sys/types.h>
-#include <time.h>
-#include <chrono>
-#include <iostream>
-#include <thread>
-#include <ctime>
-#include <limits.h>
+#ifndef PINMASK_H
+#define PINMASK_H
 
+#include <iostream>
+#include <cstdint>
 #include "finiteStateMachine.h"
-#include "GpiosAndFunctions.h"
+#include "GpioMapper.h"
+#include "finiteStateMachine.h"
 
 using namespace std;
 
 
 
-//void FSM();
+void Update_Pin_Mask(int NewState);
 
+void Pin_Mask_All_OFF();
+void Pin_Mask_InVector();
+void Pin_Mask_Wait();
+void Pin_Mask_Detumble();
+void Pin_Mask_Nominal();
+void Pin_Mask_Transmission();
+void Pin_Mask_RADEX();
 
-//  This part of the code is needed to create the wait function
-void wait ( int seconds ){
-	clock_t endwait;
-	endwait = clock () + seconds * CLOCKS_PER_SEC ;
-	while (clock() < endwait) {}
-}
+// There is an important difference Between Lowercase and UPPERCASE
+// RESET is the action of turning off - waiting and on again a device
+// Reset instead is for setting to 0 the GPIO pin.
+void GpioSet(int pin);
+void GpioReset(int pin);
+// The 2 Funcions Above are used to Set==PUT TO 1 and Reset=PUT TO 0 the GPIO pins ATOMICALLY
 
+// User-friendly -STUB Functions
+void print_PinMask();
+void print_ThreadsAndManagers();
 
-void print_SystemTime();
+void print_ADCS_State();
+void print_BatteryManagement_State();
 
-///////////////////////////////////////////
-// // //   GLOBAL STATE VARIABLE   // // //
-///////////////////////////////////////////
-clock_t startTime;
-double deltaTime;
+// // // POWER MANAGEMENT Functions
+void System_Reboot();  // Salva i dati critici nella memoria e resetta il sistema.
 
-finiteStateMachine fsm;
+/**********| TELECOM DEVICE-PAYLOAD       (PC13)*(GPIO 0 )   ******/
+void TELECOM_PowerON();
+void TELECOM_PowerOFF();
+void TELECOM_PowerRESET();
 
-int main() {
+/**********| Analog_DEVICES-PAYLOAD       (PE0)*(GPIO 2 )    ******/
+void Analog_PowerON();
+void Analog_PowerOFF();
+void Analog_PowerRESET();
 
-	cout << " - The FEES System has Started - " << endl << endl;
-	startTime = clock();
+/**********| GPS DEVICE-PAYLOAD           (PE2)*( GPIO 1 )   ******/
+void GPS_PowerON();
+void GPS_PowerOFF();
+void GPS_PowerRESET();
 
-	fsm.print_StateList();
-	fsm.print_Menu();
-	cout << endl;
+/**********| Iridium Trasmitter PAYLOAD   (PE3)*(GPIO 29)    ******/
+void Iridium_PowerON();
+void Iridium_PowerOFF();
+void Iridium_PowerRESET();
 
-	cin.get();
+/**********| RAD-Experiment PAYLOAD    (PE1)*( GPIO 5 )      ******/
+void Radex_PowerON();
+void Radex_PowerOFF();
+void Radex_PowerRESET();
+void Radex_SignalRESET();   // Signal GPIO 6 - This RESETS THE 32BitAdc
 
-	thread threadFSM(thread_Fsm); // Gestisce la macchina a stati (E la PinMask)
+// RADEX SIGNAL
+void RADEX();
 
-	thread threadUserShell(thread_UserShell); // Gestisce l'output a stampa su schermo
+/**********| RASPBERRY-Pi CONTROL - (GPIO 3 - 4)  ******     ******/
+void RaspberryPi_PowerON();			// GPIO 3
+void RaspberryPi_PowerOFF();
+void RaspberryPi_PowerRESET();
+//GpioReset(RASPY_ON);
+//RASPY_KEEP-on thread); 	//KeepON(AliveSignal)  - GPIO 4
+void RaspberryPi_Watchdog(); // Questa funzione fa partire il Thread tiene acceso il RaspberryPi
 
+/**********| MagnetoTorquerControl - ADCS SYSTEM  ***** 	******/
+void ADCS_ON();
+void ADCS_OFF();
 
-	//ThreadS che gestiscono le funzioni di sistema
+/**********| BATTERY THERMAL Control SYSTEM  (PWM 4)(GPIO 14)*/
+// BATTERY HEATER PWM - GPIO 14
+void BatteryThermal_Management_ON();
+void BatteryThermal_Management_OFF();
 
-	thread threadADCS( thread_ADCS);
-	thread threadBatteryPID( thread_BatteryPID);
-	thread threadHardwareWD( thread_HardwareWD);
-	thread threadTransmissionWD(thread_TransmissionWD);
+/**********| WatchDog  Control 	**********************		******/
+void Hardware_Watchdog_ON(); // Questa funzione fa partire il Thread che gestisce il Watchdog Hardware
+void Hardware_Watchdog_OFF();
 
+/**********| LED - TELECOM WATCHDOG  Control  (GPIO 19) *** ******/
+void Transmission_Watchdog_ON(); // Questa funzione fa partire il Thread che gestisce Led-Watchdog
+void Transmission_Watchdog_OFF();
 
-	    while(1){
-			cout << "--> Dai un comando - Esegui un evento: " << endl << endl;
-			int input;
-			cin >> input;
-
-			while (!cin.good())
-				{
-			    cin.clear();
-			    cin.ignore(INT_MAX, '\n');
-			    cout << " Non e' stato inserito un valore corretto! (int)" << endl << flush ;
-			    cout << "Esegui un evento: " << endl;
-			    cin >> input;
-				}
-			fsm.human_event_Handler(input);
-	    }
-}
-
-
-
-// Thread for FiniteStateMachine Handling Creation
-void thread_Fsm(){ // 1Hz Thread loop
-	while(1){
-    	fsm.event_Handler();
-		// Sleep this thread for 1000 MilliSeconds (to time all 1 second)
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000)); //1000
-	}
-}
+// Thread for FiniteStateMachine Handling
+void thread_Fsm(); // 1Hz Thread loop
 
 // Thread for user Screen Visualization
-void thread_UserShell(){ // 24hrz Thread loop
-	while(1){
-		//th.lock
-		print_SystemTime();
-    	fsm.print_State();
-    	fsm.print_Variables();
-    	print_ThreadsAndManagers();
-		print_PinMask();
+void thread_UserShell(); // 24hrz Thread loop
 
-		cout << endl;
-		fsm.print_Menu();
-		//th.lock
-		// Sleep this thread for 1000 MilliSeconds (to time all 1 second)
-		std::this_thread::sleep_for(std::chrono::milliseconds(50)); //1000
 
-		system("CLS");
-
-	}
-}
+void thread_ADCS();
+void thread_BatteryPID();
+void thread_HardwareWD();
+void thread_TransmissionWD();
 
 
 
-
-void print_SystemTime(){
-	deltaTime = ( std::clock() - startTime ) / (double) CLOCKS_PER_SEC;
-	cout << "  System Time is:  "<< deltaTime << endl;
-}
-
+#endif // PINMASK_H

@@ -52,128 +52,100 @@
  *                                                                                                 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- * File: main.cpp
  *
- *  Created on: 14 feb 2019
- *      Author: Stefano
  */
 
-#include <stdlib.h>
-#include <cstdlib>
-#include <sys/types.h>
-#include <time.h>
-#include <chrono>
-#include <iostream>
-#include <thread>
-#include <ctime>
-#include <limits.h>
-
-#include "finiteStateMachine.h"
-#include "GpiosAndFunctions.h"
-
-using namespace std;
+//============================================================================
+// Name        : GpioMapper.h
+// Author      : Stefano Ampolo
+// Version     : 1.0
+// Copyright   : Your copyright notice
+// Description : this file is needed to link The Schematics to the GPIO system
+//
+// DA MODIFICARE IL FILE HWDEFINITION di ARDUPILOT.
+//============================================================================
 
 
 
-//void FSM();
+#ifndef MAPPER_H
+#define MAPPER_H
+
+// GPIO PIN NUMBER
+// - POWER "CONTROLS" - RESET ATTIVI BASSI
+
+#define		UHF_RESET		0
+#define		GPS_PWR_ON		1
+#define		ANALOG_PWR_ON	2
+#define		RASPY_ON		3
+#define		RASPY_KEEP		4
+#define		RAD_PWR_ON		5
+#define		RAD_RESET		6
+
+#define		PSD_0	7
+#define		PSD_1	8
+#define		PSD_2	9
+#define		PSD_3	10
 
 
-//  This part of the code is needed to create the wait function
-void wait ( int seconds ){
-	clock_t endwait;
-	endwait = clock () + seconds * CLOCKS_PER_SEC ;
-	while (clock() < endwait) {}
-}
+// PWM CONTROLS  - PWMX,Y,Z
+//  PWMBATT/PWM4/54
+
+#define		PWM_X			PWM(1)
+#define		PWM_X_GPIO		11
+
+#define		PWM_Y			PWM(2)
+#define		PWM_Y_GPIO		12
+
+#define		PWM_Z			PWM(3)
+#define		PWM_Z_GPIO		13
+
+#define	BATTERY_HEATER_PWM		PWM(4)
+#define	BATTERY_HEATER_GPIO 	14
+
+#define		DIR_X		15
+#define		DIR_Y		16
+#define		DIR_Z		17
 
 
-void print_SystemTime();
+#define		RADFET_OWB		18
 
-///////////////////////////////////////////
-// // //   GLOBAL STATE VARIABLE   // // //
-///////////////////////////////////////////
-clock_t startTime;
-double deltaTime;
-
-finiteStateMachine fsm;
-
-int main() {
-
-	cout << " - The FEES System has Started - " << endl << endl;
-	startTime = clock();
-
-	fsm.print_StateList();
-	fsm.print_Menu();
-	cout << endl;
-
-	cin.get();
-
-	thread threadFSM(thread_Fsm); // Gestisce la macchina a stati (E la PinMask)
-
-	thread threadUserShell(thread_UserShell); // Gestisce l'output a stampa su schermo
+#define		LED		19
 
 
-	//ThreadS che gestiscono le funzioni di sistema
-
-	thread threadADCS( thread_ADCS);
-	thread threadBatteryPID( thread_BatteryPID);
-	thread threadHardwareWD( thread_HardwareWD);
-	thread threadTransmissionWD(thread_TransmissionWD);
+#define WATCHDOG	20
 
 
-	    while(1){
-			cout << "--> Dai un comando - Esegui un evento: " << endl << endl;
-			int input;
-			cin >> input;
+// IRIDIUM - SDB (GPIO 60-68)
 
-			while (!cin.good())
-				{
-			    cin.clear();
-			    cin.ignore(INT_MAX, '\n');
-			    cout << " Non e' stato inserito un valore corretto! (int)" << endl << flush ;
-			    cout << "Esegui un evento: " << endl;
-			    cin >> input;
-				}
-			fsm.human_event_Handler(input);
-	    }
-}
+#define		SDB_0	21		// DCD
+#define		SDB_1	22		// DSR
+#define		SDB_2	23		// DTR
+#define		SDB_3	24		// CTS
+#define		SDB_4	25		// RTS
+#define		SDB_5	26	// on-off?
+#define		SDB_6	27		// RI
+#define		SDB_7	28		// NET
+#define		SDB_PWR_ON	29  // Iridium Pwr On
 
 
-
-// Thread for FiniteStateMachine Handling Creation
-void thread_Fsm(){ // 1Hz Thread loop
-	while(1){
-    	fsm.event_Handler();
-		// Sleep this thread for 1000 MilliSeconds (to time all 1 second)
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000)); //1000
-	}
-}
-
-// Thread for user Screen Visualization
-void thread_UserShell(){ // 24hrz Thread loop
-	while(1){
-		//th.lock
-		print_SystemTime();
-    	fsm.print_State();
-    	fsm.print_Variables();
-    	print_ThreadsAndManagers();
-		print_PinMask();
-
-		cout << endl;
-		fsm.print_Menu();
-		//th.lock
-		// Sleep this thread for 1000 MilliSeconds (to time all 1 second)
-		std::this_thread::sleep_for(std::chrono::milliseconds(50)); //1000
-
-		system("CLS");
-
-	}
-}
+#define EX_GPIO_1	30
+#define	EX_GPIO_2	31
+#define	EX_GPIO_3	32
+#define	EX_GPIO_4	33
 
 
 
+// POWER "INPUTS"
+//	PGOOD -
+// 	VUSB  - ADC INTERNO + Termocoppia
 
-void print_SystemTime(){
-	deltaTime = ( std::clock() - startTime ) / (double) CLOCKS_PER_SEC;
-	cout << "  System Time is:  "<< deltaTime << endl;
-}
+//ADC ESTERNO
+// I_ X,Y,Z COIL
+// BATT_TEMP
+// I_CELL_ +X,+Y,+Z,-X
+// V_CELL_ +X,+Y+Z,-X
+// V_CELL_ +Y_1
 
+
+
+#endif // MAPPER_H
