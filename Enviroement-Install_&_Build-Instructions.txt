@@ -1,0 +1,49 @@
+To create a FEES-enviroement on Ubuntu-Linux you need to do these commands.
+
+
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse"
+sudo apt-get -qq -y install git
+git clone https://github.com/HawkOne/ArduNaut.git ArduNaut   
+cd ArduNaut
+git submodule init
+git submodule update
+./install-prereqs-ubuntu.sh -y
+sudo apt-get install cmake
+. ~/.profile
+
+
+sudo apt install python-pip
+pip install future # https://pypi.python.org/pypi/future or http://python-future.org/
+
+
+#LOG OUT AND LOG BACK IN
+### Now the Enviroement is set!  ###
+
+
+
+# To build: 
+# For FEES - bootloader:
+
+./waf clean
+./waf distclean
+./waf configure --board FEES_REV_D --bootloader
+./waf clean
+./waf bootloader
+
+
+
+# For FEES -> Naut (Copter):
+
+./waf clean
+./waf distclean
+./waf configure --board FEES_REV_D
+./waf copter -j2
+
+
+
+
+////
+./waf --targets bin/arducopter --update    
+//// This last command is to download the firmware to the usb board.
