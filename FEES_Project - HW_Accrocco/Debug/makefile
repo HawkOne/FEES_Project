@@ -34,24 +34,24 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-TestFEES-FreeRtos-\ GPIOS-BUSSES-PWM.elf \
+FEES-Trunk.elf \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-TestFEES-FreeRtos-\ GPIOS-BUSSES-PWM.list \
+FEES-Trunk.list \
 
 OBJCOPY_BIN += \
-TestFEES-FreeRtos-\ GPIOS-BUSSES-PWM.bin \
+FEES-Trunk.bin \
 
 
 # All Target
-all: TestFEES-FreeRtos-\ GPIOS-BUSSES-PWM.elf secondary-outputs
+all: FEES-Trunk.elf secondary-outputs
 
 # Tool invocations
-TestFEES-FreeRtos-\ GPIOS-BUSSES-PWM.elf: $(OBJS) $(USER_OBJS) C:\Users\stefa\Desktop\FEES-1-1-2021\FINAL\ FEES\5_FESS-CubeIDE-FreeRtos-WIP\TestFreeRtos\STM32F407VGTX_FLASH.ld
-	arm-none-eabi-gcc -o "TestFEES-FreeRtos- GPIOS-BUSSES-PWM.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\stefa\Desktop\FEES-1-1-2021\FINAL FEES\5_FESS-CubeIDE-FreeRtos-WIP\TestFreeRtos\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="TestFEES-FreeRtos- GPIOS-BUSSES-PWM.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+FEES-Trunk.elf: $(OBJS) $(USER_OBJS)
+	arm-none-eabi-gcc -o "FEES-Trunk.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 --specs=nosys.specs -Wl,-Map="FEES-Trunk.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -60,13 +60,13 @@ default.size.stdout: $(EXECUTABLES)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-TestFEES-FreeRtos-\ GPIOS-BUSSES-PWM.list: $(EXECUTABLES)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "TestFEES-FreeRtos- GPIOS-BUSSES-PWM.list"
+FEES-Trunk.list: $(EXECUTABLES)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "FEES-Trunk.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-TestFEES-FreeRtos-\ GPIOS-BUSSES-PWM.bin: $(EXECUTABLES)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "TestFEES-FreeRtos- GPIOS-BUSSES-PWM.bin"
+FEES-Trunk.bin: $(EXECUTABLES)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "FEES-Trunk.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 

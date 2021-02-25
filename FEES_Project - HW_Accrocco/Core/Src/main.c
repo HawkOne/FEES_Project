@@ -21,8 +21,6 @@
 #include "main.h"
 #include "cmsis_os.h"
 
-
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -53,6 +51,9 @@
 
 #include <limits.h>
 
+#include <stdio.h>
+#include "TEST.h"
+
 
 //#include "../1_Hardware&Drivers.hpp"
 //#include "../2_Threads&Handlers.hpp"
@@ -68,6 +69,17 @@ typedef StaticTask_t osStaticThreadDef_t;
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define TRUE 1
+#define FALSE 0
+
+#define TESTING 0
+#define TEST if(TESTING)
+
+#define FLAG 0
+
+char newline[]="\n\r";
+char rx_buffer[2];
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -212,6 +224,24 @@ void Task06(void *argument);
 #include <string.h>
 
 
+void FEES_SOS(int delay){
+	  HAL_GPIO_WritePin(GPIOD_BASE, GPIO_PIN_12, GPIO_PIN_SET);
+
+	  // S = . . .
+	  HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12); 	HAL_Delay(delay); 	  	HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12);	  HAL_Delay(delay);
+	  HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12); 	HAL_Delay(delay); 	  	HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12);	  HAL_Delay(delay);
+	  HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12); 	HAL_Delay(delay); 	  	HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12);	  HAL_Delay(delay);
+	  // O = - - -
+	  HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12);	HAL_Delay(delay*2); 	HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12);	  HAL_Delay(delay*2);
+	  HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12);	HAL_Delay(delay*2); 	HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12);	  HAL_Delay(delay*2);
+	  HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12);	HAL_Delay(delay*2); 	HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12);	  HAL_Delay(delay*2);
+	  // S = . . .
+	  HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12); 	HAL_Delay(delay); 	  	HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12);	  HAL_Delay(delay);
+	  HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12); 	HAL_Delay(delay); 	  	HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12);	  HAL_Delay(delay);
+	  HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12); 	HAL_Delay(delay); 	  	HAL_GPIO_TogglePin(GPIOD_BASE, GPIO_PIN_12);	  HAL_Delay(delay);
+
+	  HAL_GPIO_WritePin(GPIOD_BASE, GPIO_PIN_12, GPIO_PIN_SET);
+}
 
 typedef struct{
     GPIO_TypeDef * PORT__BASE;
@@ -1509,6 +1539,15 @@ int main(void)
 
   FEES_Init();
 
+  HAL_UART_Receive_IT(&huart3, (uint8_t*) rx_buffer, 2);	// Enable the USART2 in RX mode under Interrupt  2Characters
+
+
+   char StringInit[]= "== START-UP Completed == \n\r";
+   HAL_UART_Transmit(&huart2, (uint8_t*) StringInit, sizeof(StringInit)-1, 100);
+
+
+   // Init Procedure
+   FEES_SOS(50);
 
   FEES_Startup_PWM_BATTERY(50); // STARTUP ALERT
 
@@ -2153,17 +2192,17 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, GPS_PWR_ON_Pin|SBD_PWR_ON_Pin|CS_NAND_Pin|CS_LORA_Pin
-                          |RSBY_ON_Pin|DIR_X_COIL_Pin|DIR_Y_COIL_Pin|DIR_Z_COIL_Pin
+                          |RSBY_ON_Pin|DIR_COIL_X_Pin|DIR_COIL_Y_Pin|DIR_COIL_Z_Pin
                           |CS_GYRO_Pin|EN_ADC1_Pin|EN_ADC3_Pin|EN_ADC2_Pin
                           |SBD_SER_RI_Pin|SBD_SER_NET_Pin|ANA_PWR_ON_Pin|RAD_PWR_ON_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, UHF_RESET_Pin|RADFET_OWB_Pin|RAD_RESET_Pin|PSD1_SEL0_Pin
-                          |PSD2_SEL1_Pin|PSD2_SEL0_Pin|CS_PSD1_AMP_Pin|CS_PSD2_AMP_Pin
+                          |PSD2_SEL1_Pin|PSD2_SEL0_Pin|PSD1_AMP_CS_Pin|PSD2_AMP_CS_Pin
                           |EX_SPI_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(PSD1_SEL1_GPIO_Port, PSD1_SEL1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(PSD1_SEL1_GPIO_Port, PSD1_SEL1_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, EX_GPIO3_Pin|CS_RADFET_Pin|EX_GPIO4_Pin, GPIO_PIN_RESET);
@@ -2172,7 +2211,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, RSBY_KEEP_EN_Pin|EX_GPIO1_Pin|EX_GPIO2_Pin|WATCHDOG_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, CS_EEPROM_Pin|CS_FRAM_Pin|INT_GYRO_Pin
+  HAL_GPIO_WritePin(GPIOD, CS_EEPROM_Pin|CS_FRAM_Pin|CS_GYROD12_Pin|INT_GYRO_Pin
                           |CS_GYRO2_Pin|INT_GYRO2_Pin|SBD_SER_DCD_Pin|SBD_SER_DSR_Pin
                           |SBD_SER_DTR_Pin|SBD_SER_CTS_Pin|SBD_SER_RTS_Pin|SBD_ON_OFF_Pin, GPIO_PIN_RESET);
 
@@ -2181,7 +2220,7 @@ static void MX_GPIO_Init(void)
                            CS_GYRO_Pin EN_ADC1_Pin EN_ADC3_Pin EN_ADC2_Pin
                            SBD_SER_RI_Pin SBD_SER_NET_Pin ANA_PWR_ON_Pin RAD_PWR_ON_Pin */
   GPIO_InitStruct.Pin = GPS_PWR_ON_Pin|SBD_PWR_ON_Pin|CS_NAND_Pin|CS_LORA_Pin
-                          |RSBY_ON_Pin|DIR_X_COIL_Pin|DIR_Y_COIL_Pin|DIR_Z_COIL_Pin
+                          |RSBY_ON_Pin|DIR_COIL_X_Pin|DIR_COIL_Y_Pin|DIR_COIL_Z_Pin
                           |CS_GYRO_Pin|EN_ADC1_Pin|EN_ADC3_Pin|EN_ADC2_Pin
                           |SBD_SER_RI_Pin|SBD_SER_NET_Pin|ANA_PWR_ON_Pin|RAD_PWR_ON_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -2193,8 +2232,8 @@ static void MX_GPIO_Init(void)
                            PSD1_SEL0_Pin PSD2_SEL1_Pin PSD2_SEL0_Pin PSD1_AMP_CS_Pin
                            PSD2_AMP_CS_Pin EX_SPI_EN_Pin */
   GPIO_InitStruct.Pin = UHF_RESET_Pin|RADFET_OWB_Pin|RAD_RESET_Pin|PSD1_SEL1_Pin
-                          |PSD1_SEL0_Pin|PSD2_SEL1_Pin|PSD2_SEL0_Pin|CS_PSD1_AMP_Pin
-                          |CS_PSD2_AMP_Pin|EX_SPI_EN_Pin;
+                          |PSD1_SEL0_Pin|PSD2_SEL1_Pin|PSD2_SEL0_Pin|PSD1_AMP_CS_Pin
+                          |PSD2_AMP_CS_Pin|EX_SPI_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -2223,7 +2262,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : CS_EEPROM_Pin CS_FRAM_Pin CS_GYROD12_Pin INT_GYRO_Pin
                            CS_GYRO2_Pin INT_GYRO2_Pin SBD_SER_DCD_Pin SBD_SER_DSR_Pin
                            SBD_SER_DTR_Pin SBD_SER_CTS_Pin SBD_SER_RTS_Pin SBD_ON_OFF_Pin */
-  GPIO_InitStruct.Pin = CS_EEPROM_Pin|CS_FRAM_Pin|INT_GYRO_Pin
+  GPIO_InitStruct.Pin = CS_EEPROM_Pin|CS_FRAM_Pin|CS_GYROD12_Pin|INT_GYRO_Pin
                           |CS_GYRO2_Pin|INT_GYRO2_Pin|SBD_SER_DCD_Pin|SBD_SER_DSR_Pin
                           |SBD_SER_DTR_Pin|SBD_SER_CTS_Pin|SBD_SER_RTS_Pin|SBD_ON_OFF_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -2241,6 +2280,21 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+// RX char from USART2 in Interrupt mode
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	  HAL_UART_Transmit(&huart3, (uint8_t*) newline, sizeof(newline), 100);
+	  HAL_UART_Transmit(&huart3, (uint8_t*) " - I RECEIVED : ", 16 , 100);
+	  HAL_UART_Transmit(&huart3, (uint8_t*) rx_buffer, sizeof(rx_buffer), 100);
+	  HAL_UART_Transmit(&huart3, (uint8_t*) newline, sizeof(newline), 100);
+
+	 // if(huart2.Instance->RDR != 13) huart2.Instance->RDR = 13;
+
+  // Restart USART in Rx in Interrupt mode
+  HAL_UART_Receive_IT(&huart3, (uint8_t*) rx_buffer, sizeof(rx_buffer));
+
+}
+
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -2256,8 +2310,20 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	 // FEES_FSM();
-  }
+    osDelay(250);
+    char StandardString[]= "I'm ALIVE! \r\n";
+    char StringExtra[]= "============= \r\n";
+
+
+    if(FLAG){
+    		HAL_UART_Transmit(&huart3, (uint8_t*) StandardString, sizeof(StandardString)-1 , 100);
+    		HAL_UART_Transmit(&huart3, (uint8_t*) StringExtra, sizeof(StringExtra)-1 , 100);
+    	  }
+
+    TEST Testiamo();
+    TEST osDelay(1000);
+
+    }
   /* USER CODE END 5 */
 }
 

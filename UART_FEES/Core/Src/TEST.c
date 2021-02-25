@@ -26,5 +26,5 @@ UART_HandleTypeDef huart3;
 void Testiamo(){
 
 	char BUFFERTESTIAMO[] = "TEST ";
-	HAL_UART_Transmit(&huart3, BUFFERTESTIAMO, sizeof(BUFFERTESTIAMO)-1 , 100);
+	HAL_UART_Transmit(&huart3, (uint8_t *)  BUFFERTESTIAMO, sizeof(BUFFERTESTIAMO)-1 , 100);
 }

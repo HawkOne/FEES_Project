@@ -95,11 +95,11 @@ char tx_buffer[10];
 
 
 void led_on()	{
-	HAL_UART_Transmit(&huart3, "ACCENDO!\n\r", 10, 100);
+	HAL_UART_Transmit(&huart3, (uint8_t *)  "ACCENDO!\n\r", 10, 100);
 	HAL_GPIO_WritePin(GPIOD_BASE, GPIO_PIN_12, GPIO_PIN_RESET);
 }
 void led_off(){
-	HAL_UART_Transmit(&huart3, "SPENGO!\n\r", 9, 100);
+	HAL_UART_Transmit(&huart3, (uint8_t *)  "SPENGO!\n\r", 9, 100);
 	HAL_GPIO_WritePin(GPIOD_BASE, GPIO_PIN_12, GPIO_PIN_SET);
 }
 
@@ -180,11 +180,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_GPIO_WritePin(GPIOD_BASE, GPIO_PIN_12, GPIO_PIN_SET);
 
-  HAL_UART_Receive_IT(&huart3, rx_buffer, 2);	// Enable the USART2 in RX mode under Interrupt  2Characters
+  HAL_UART_Receive_IT(&huart3, (uint8_t *) rx_buffer, 2);	// Enable the USART2 in RX mode under Interrupt  2Characters
 
 
   char StringInit[]= "== START-UP Completed == \n\r";
-  HAL_UART_Transmit(&huart2, StringInit, sizeof(StringInit)-1, 100);
+  HAL_UART_Transmit(&huart2, (uint8_t *)  StringInit, sizeof(StringInit)-1, 100);
 
 
   // Init Procedure
@@ -438,15 +438,15 @@ static void MX_GPIO_Init(void)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	  RxData=TRUE;
-	  HAL_UART_Transmit(&huart3, newline, sizeof(newline), 100);
-	  HAL_UART_Transmit(&huart3, " - I RECEIVED : ", 16 , 100);
-	  HAL_UART_Transmit(&huart3, rx_buffer, sizeof(rx_buffer), 100);
-	  HAL_UART_Transmit(&huart3, newline, sizeof(newline), 100);
+	  HAL_UART_Transmit(&huart3,  (uint8_t *) newline, sizeof(newline), 100);
+	  HAL_UART_Transmit(&huart3,  (uint8_t *) " - I RECEIVED : ", 16 , 100);
+	  HAL_UART_Transmit(&huart3,  (uint8_t *) rx_buffer, sizeof(rx_buffer), 100);
+	  HAL_UART_Transmit(&huart3,  (uint8_t *) newline, sizeof(newline), 100);
 
 	 // if(huart2.Instance->RDR != 13) huart2.Instance->RDR = 13;
 
   // Restart USART in Rx in Interrupt mode
-  HAL_UART_Receive_IT(&huart3, rx_buffer, sizeof(rx_buffer));
+  HAL_UART_Receive_IT(&huart3, (uint8_t *)  rx_buffer, sizeof(rx_buffer));
 
   State_Updater();
 }
@@ -472,8 +472,8 @@ void StartDefaultTask(void *argument)
 
 
     if(FLAG){
-    		HAL_UART_Transmit(&huart3, StandardString, sizeof(StandardString)-1 , 100);
-    		HAL_UART_Transmit(&huart3, StringExtra, sizeof(StringExtra)-1 , 100);
+    		HAL_UART_Transmit(&huart3,  (uint8_t *) StandardString, sizeof(StandardString)-1 , 100);
+    		HAL_UART_Transmit(&huart3,  (uint8_t *) StringExtra, sizeof(StringExtra)-1 , 100);
     	  }
 
     TEST Testiamo();
