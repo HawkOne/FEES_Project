@@ -1089,7 +1089,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, RSBY_KEEP_EN_Pin|EX_GPIO1_Pin|EX_GPIO2_Pin|WATCHDOG_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, CS_EEPROM_Pin|CS_FRAM_Pin|CS_GYROD12_Pin|INT_GYRO_Pin
+  HAL_GPIO_WritePin(GPIOD, CS_EEPROM_Pin|CS_FRAM_Pin|TMTC_MCU_WD_Pin|INT_GYRO_Pin
                           |CS_GYRO2_Pin|INT_GYRO2_Pin|SBD_SER_DCD_Pin|SBD_SER_DSR_Pin
                           |SBD_SER_DTR_Pin|SBD_SER_CTS_Pin|SBD_SER_RTS_Pin|SBD_ON_OFF_Pin, GPIO_PIN_RESET);
 
@@ -1137,10 +1137,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(BOOT1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : CS_EEPROM_Pin CS_FRAM_Pin CS_GYROD12_Pin INT_GYRO_Pin
+  /*Configure GPIO pins : CS_EEPROM_Pin CS_FRAM_Pin TMTC_MCU_WD_Pin INT_GYRO_Pin
                            CS_GYRO2_Pin INT_GYRO2_Pin SBD_SER_DCD_Pin SBD_SER_DSR_Pin
                            SBD_SER_DTR_Pin SBD_SER_CTS_Pin SBD_SER_RTS_Pin SBD_ON_OFF_Pin */
-  GPIO_InitStruct.Pin = CS_EEPROM_Pin|CS_FRAM_Pin|CS_GYROD12_Pin|INT_GYRO_Pin
+  GPIO_InitStruct.Pin = CS_EEPROM_Pin|CS_FRAM_Pin|TMTC_MCU_WD_Pin|INT_GYRO_Pin
                           |CS_GYRO2_Pin|INT_GYRO2_Pin|SBD_SER_DCD_Pin|SBD_SER_DSR_Pin
                           |SBD_SER_DTR_Pin|SBD_SER_CTS_Pin|SBD_SER_RTS_Pin|SBD_ON_OFF_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;

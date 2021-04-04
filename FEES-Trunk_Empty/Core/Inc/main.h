@@ -126,8 +126,8 @@ void Error_Handler(void);
 #define CS_EEPROM_GPIO_Port GPIOD
 #define CS_FRAM_Pin GPIO_PIN_11
 #define CS_FRAM_GPIO_Port GPIOD
-#define CS_GYROD12_Pin GPIO_PIN_12
-#define CS_GYROD12_GPIO_Port GPIOD
+#define TMTC_MCU_WD_Pin GPIO_PIN_12
+#define TMTC_MCU_WD_GPIO_Port GPIOD
 #define INT_GYRO_Pin GPIO_PIN_13
 #define INT_GYRO_GPIO_Port GPIOD
 #define CS_GYRO2_Pin GPIO_PIN_14
