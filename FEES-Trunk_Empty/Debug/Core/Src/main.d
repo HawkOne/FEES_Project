@@ -47,7 +47,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Src/../Inc/FEES.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- ../Core/Inc/main.h ../Core/Inc/PORCODIO.h
+ ../Core/Inc/main.h
 
 ../Core/Src/../Inc/FEES.h:
 
@@ -148,5 +148,3 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Src/../Inc/FEES.h \
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 
 ../Core/Inc/main.h:
-
-../Core/Inc/PORCODIO.h:

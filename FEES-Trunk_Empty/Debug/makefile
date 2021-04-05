@@ -34,24 +34,24 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-FEES-Trunk_Empty.elf \
+FEES-Trunk.elf \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-FEES-Trunk_Empty.list \
+FEES-Trunk.list \
 
 OBJCOPY_BIN += \
-FEES-Trunk_Empty.bin \
+FEES-Trunk.bin \
 
 
 # All Target
-all: FEES-Trunk_Empty.elf secondary-outputs
+all: FEES-Trunk.elf secondary-outputs
 
 # Tool invocations
-FEES-Trunk_Empty.elf: $(OBJS) $(USER_OBJS) C:\Users\stefa\Documents\STM32IDE_Workspace\FEES-Trunk_Empty\STM32F407VGTX_FLASH.ld
-	arm-none-eabi-gcc -o "FEES-Trunk_Empty.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\stefa\Documents\STM32IDE_Workspace\FEES-Trunk_Empty\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="FEES-Trunk_Empty.map" -Wl,--gc-sections -static -L"\Core\Inc" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+FEES-Trunk.elf: $(OBJS) $(USER_OBJS) C:\Users\stefa\Desktop\github\FEES-Trunk_Empty\STM32F407VGTX_FLASH.ld
+	arm-none-eabi-gcc -o "FEES-Trunk.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\stefa\Desktop\github\FEES-Trunk_Empty\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="FEES-Trunk.map" -Wl,--gc-sections -static -L"\Core\Inc" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -60,13 +60,13 @@ default.size.stdout: $(EXECUTABLES)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-FEES-Trunk_Empty.list: $(EXECUTABLES)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "FEES-Trunk_Empty.list"
+FEES-Trunk.list: $(EXECUTABLES)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "FEES-Trunk.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-FEES-Trunk_Empty.bin: $(EXECUTABLES)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "FEES-Trunk_Empty.bin"
+FEES-Trunk.bin: $(EXECUTABLES)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "FEES-Trunk.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 

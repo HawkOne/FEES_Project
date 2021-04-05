@@ -87,6 +87,26 @@ LM75B::~LM75B(){}
 
 float LM75B::getTemp()
 {
+	#ifdef FREERTOS
+		char cmd_send[2];
+	  	char cmd_receive[2];
+	  	char buf[50];
+	  	
+	  		cmd_send[0]=LM75B_Temp;
+	  		
+	    HAL_I2C_Master_Transmit(&hi2c2,LM75B_ADDR<<1,cmd_send,2,100);
+		HAL_I2C_Master_Receive(	&hi2c2,LM75B_ADDR<<1,cmd_receive,2,100);
+
+		memset(buf,' ',sizeof(buf));
+		sprintf(buf," Temperature: %d,%d  \n", cmd_receive[0],(cmd_receive[1]/128)*5);
+		HAL_UART_Transmit( &huart3,buf,sizeof(buf),0x100);
+		osDelay(100);
+		return (cmd_receive[0],(cmd_receive[1]/128)*5);
+    #endif
+
+
+
+	#ifdef CHIBIOS
 	i2cStart(&LM75B_BUS_I2C, &LM75B_i2cconfig);
     uint8_t cmd[2];
     cmd[0] = LM75B_Temp;
@@ -97,6 +117,7 @@ float LM75B::getTemp()
     i2cStop(&LM75B_BUS_I2C);
 
     return (   float((cmd[0]<<8)|cmd[1]) / 256.0   );
+    #endif
 }
 
 /////////////////////////////////////EXTRA///////////////////////////////////////////////

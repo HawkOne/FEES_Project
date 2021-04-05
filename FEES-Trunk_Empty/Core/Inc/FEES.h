@@ -25,7 +25,7 @@ void Testiamo();
 #define TRUE 1
 #define FALSE 0
 
-//#define TESTING 1
+//#define TESTING 0
 #define TEST if(TESTING)
 
 //#define FLAG 1
@@ -34,8 +34,6 @@ extern const char newline[4];
 extern char rx_buffer[2];
 
 
-extern int TESTING;
-extern int FLAG;
 
 extern int RxData;
 

@@ -31,7 +31,7 @@ const char newline[4] = { "/r/n" };
 char rx_buffer[2];
 
 TESTING=0;
-FLAG=1;
+FLAG=0;
 
 
 RxData=0;

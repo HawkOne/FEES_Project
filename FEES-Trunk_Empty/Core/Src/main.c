@@ -59,7 +59,6 @@
 //------- ------- ------- ------ ----- //
 
 
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -283,85 +282,9 @@ void Task06(void *argument);
 /* USER CODE BEGIN 0 */
 #include "main.h"
 #include <string.h>
+#include <stdio.h>
 
-//
-//typedef struct{
-//    GPIO_TypeDef * PORT__BASE;
-//	int pin_number;
-//	uint8_t address;
-//}FEES_Pin;
-//
-//
-//
-//// PWM_ CONTROL
-//FEES_Pin PWM_HEATER;
-//FEES_Pin PWM_X_COIL;
-//FEES_Pin PWM_Y_COIL;
-//FEES_Pin PWM_Z_COIL;
-//// GPIO DI DIREZIONE
-//FEES_Pin DIR_X_COIL;
-//FEES_Pin DIR_Y_COIL;
-//FEES_Pin DIR_Z_COIL;
-////GPIO DI CONTROLLO
-//FEES_Pin WATCHDOG;
-//FEES_Pin UHF_RESET;
-//FEES_Pin RAD_RESET;
-//FEES_Pin RADFET_OWB;
-//FEES_Pin TMTC_WD;
-//FEES_Pin ANA_PWR_ON;
-//FEES_Pin RAD_PWR_ON;
-//FEES_Pin GPS_PWR_ON;
-//FEES_Pin SBD_PWR_ON;
-//FEES_Pin RSBY_PWR_ON;
-//FEES_Pin RSBY_KEEP_EN;
-////CS_SPI_SENSORI
-//FEES_Pin CS_NAND;
-//FEES_Pin CS_LORA;
-//FEES_Pin CS_RADFET;
-//FEES_Pin EN_ADC1;
-//FEES_Pin EN_ADC2;
-//FEES_Pin EN_ADC3;
-//FEES_Pin EXT_SPI_EN;
-//FEES_Pin CS_EEPROM;
-//FEES_Pin CS_FRAM;
-//FEES_Pin CS_PSD1_AMP;
-//FEES_Pin CS_PSD2_AMP;
-//FEES_Pin CS_GYRO;
-//FEES_Pin CS_GYRO2;
-//// GPIO EXTRA
-//FEES_Pin EX_GPIO1;
-//FEES_Pin EX_GPIO2;
-//FEES_Pin EX_GPIO3;
-//FEES_Pin EX_GPIO4;
-//// Select
-//FEES_Pin PSD1_SEL0;
-//FEES_Pin PSD1_SEL1;
-//FEES_Pin PSD2_SEL0;
-//FEES_Pin PSD2_SEL1;
-//// IMU
-//FEES_Pin INT_GYRO1;
-//FEES_Pin INT_GYRO2;
-//// Radex
-//FEES_Pin RAD_RESET;
-//FEES_Pin RADFET_OWB;
-////SDB
-//FEES_Pin SDB_ON_OFF;
-//FEES_Pin SDB_SER_RI;
-//FEES_Pin SDB_SER_NET;
-//FEES_Pin SDB_SER_DCD;
-//FEES_Pin SDB_SER_DSR;
-//FEES_Pin SDB_SER_DTR;
-//FEES_Pin SDB_SER_CTS;
-//FEES_Pin SDB_SER_RTS;
-//// Other
-//FEES_Pin USB_VBUS;
-//FEES_Pin PGOOD;
-//
-//FEES_Pin JTAG_TMS;
-//FEES_Pin JTAG_TCK;
-
-
-#include "PORCODIO.h"
+//#include "PORCODIO.h"
 
 /* USER CODE END 0 */
 
@@ -374,7 +297,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
 
 
-	BUONGIORNO_PORCODIOSO();
+	//BUONGIORNO_PORCODIOSO();
 
 
 
@@ -427,6 +350,21 @@ int main(void)
    FEES_SOS(50);
 
    FEES_Startup_PWM_BATTERY(50); // STARTUP ALERT
+
+   // TEST ZONE
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   /* USER CODE END 2 */
@@ -600,7 +538,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 100000;
+  hi2c1.Init.ClockSpeed = 400000;
   hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -634,7 +572,7 @@ static void MX_I2C2_Init(void)
 
   /* USER CODE END I2C2_Init 1 */
   hi2c2.Instance = I2C2;
-  hi2c2.Init.ClockSpeed = 100000;
+  hi2c2.Init.ClockSpeed = 400000;
   hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c2.Init.OwnAddress1 = 0;
   hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -1190,9 +1128,9 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  char StringBuffer[]= "== Sono Vivo == \n\r";
-	  HAL_UART_Transmit(&huart3, (uint8_t *)  StringBuffer, sizeof(StringBuffer)-1, 100);
-
+	  if(0){   char StringBuffer[]= "== Sono Vivo == \n\r";
+	  	  	  	  HAL_UART_Transmit(&huart3, (uint8_t *)  StringBuffer, sizeof(StringBuffer)-1, 100);
+	  	  	  }
     osDelay(1000);
 
 //    osDelay(250);
@@ -1292,12 +1230,15 @@ void Task02(void *argument)
 /* USER CODE END Header_Task03 */
 void Task03(void *argument)
 {
+
+
+
   /* USER CODE BEGIN Task03 */
   /* Infinite loop */
   for(;;)
   {
-
 	  osDelay(1000);
+
   }
 
   /* USER CODE END Task03 */
@@ -1312,11 +1253,73 @@ void Task03(void *argument)
 /* USER CODE END Header_Task04 */
 void Task04(void *argument)
 {
+
+	//     LM75B INDIRIZZO I2C     //
+   #define    LM75B_ADDR        0b1001000
+
+   //     LM75B REGISTRI UTILI    //
+   #define    LM75B_Conf        0x01
+   #define    LM75B_Temp        0x00
+   #define    LM75B_Tos         0x03
+   #define    LM75B_Thyst       0x02
+
+   /*
+	* I2C frequency - 400 400 khz - FAST I2C  ( CAN ALSO USE 100000  for 100Khz - SLOW I2C )
+	*/
+   #define LM75B_I2C_FREQ 400000
+
+   /*
+	* Using I2CD2
+	* I2C2_SDA PB10
+	* I2C2_SCL PB11
+	*/
+   #define LM75B_BUS_I2C I2CD2
+
+
+
+	char cmd_send[2];
+	char cmd_receive[2];
+	char buf[45];
+	char buf2[45];
+
+	cmd_send[0]= LM75B_Temp;
+
+	float a=0;
+
   /* USER CODE BEGIN Task04 */
   /* Infinite loop */
   for(;;)
   {
-	  osDelay(1000);
+		cmd_send[0]= 0;
+		cmd_send[1]= 0;
+
+		cmd_receive[0]=0;
+		cmd_receive[1]=0;
+
+		HAL_I2C_Master_Transmit(&hi2c2,LM75B_ADDR<<1,cmd_send,2,100);
+		HAL_I2C_Master_Receive(	&hi2c2,LM75B_ADDR<<1,cmd_receive,2,100);
+
+		uint16_t bufferint = (cmd_receive[1] | (cmd_receive[0]<<8))>>5;
+		if (bufferint > 2048 ) bufferint = (bufferint & 1111111111) | 100000000000000 ;// Test senza 2^11 con 2^15  ( sposto l'1 in avanti)
+		a = (float)bufferint * 0.125;
+
+//		memset(buf,' ' , 45); // ,sizeof(buf));
+//		sprintf(buf,"Temperature: %d - %d \r\n" ,cmd_receive[0] , cmd_receive[1]); // %f  \n" ,a); //cmd_receive[0],(cmd_receive[1]/128)*5);
+//		HAL_UART_Transmit( &huart3,buf,sizeof(buf),100);
+
+		memset(buf2,' ' ,sizeof(buf));
+		char buffer[16];
+		sprintf(buffer,"FLOAT %.3f \n\r" , a); // %f  \n" ,a); //cmd_receive[0],(cmd_receive[1]/128)*5);
+		HAL_UART_Transmit( &huart3,buffer,sizeof(buffer),100);
+
+	//		osDelay(100);
+	//		HAL_Delay(500);
+
+		//HAL_UART_Transmit( &huart3,"\n", 2,100);
+
+
+	// 00000000 // 00000000
+	osDelay(100);
 
   }
   /* USER CODE END Task04 */
