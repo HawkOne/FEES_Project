@@ -20,13 +20,20 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "../Inc/FEES.h"
+#include "../Inc/LM75B.hpp"
+
+
 #include "main.h"
 #include "cmsis_os.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
 #include <stdio.h>
+#include <string.h>
+//#include <iostream.h>
+
 //FEES RELATED INCLUDES
 
 #include <stdlib.h>
@@ -34,6 +41,7 @@
 #include <time.h>
 
 #include <limits.h>
+#include <LM75B.hpp>
 
 
 //#include "../1_Hardware&Drivers.hpp"
@@ -1254,69 +1262,68 @@ void Task03(void *argument)
 void Task04(void *argument)
 {
 
-	//     LM75B INDIRIZZO I2C     //
-   #define    LM75B_ADDR        0b1001000
-
-   //     LM75B REGISTRI UTILI    //
-   #define    LM75B_Conf        0x01
-   #define    LM75B_Temp        0x00
-   #define    LM75B_Tos         0x03
-   #define    LM75B_Thyst       0x02
-
-   /*
-	* I2C frequency - 400 400 khz - FAST I2C  ( CAN ALSO USE 100000  for 100Khz - SLOW I2C )
-	*/
-   #define LM75B_I2C_FREQ 400000
-
-   /*
-	* Using I2CD2
-	* I2C2_SDA PB10
-	* I2C2_SCL PB11
-	*/
-   #define LM75B_BUS_I2C I2CD2
+	LM75B Termometro1;
 
 
-
-	char cmd_send[2];
-	char cmd_receive[2];
-	char buf[45];
-	char buf2[45];
-
-	cmd_send[0]= LM75B_Temp;
-
-	float a=0;
+//	//     LM75B INDIRIZZO I2C     //
+//   #define    LM75B_ADDR        0b1001000
+//
+//   //     LM75B REGISTRI UTILI    //
+//   #define    LM75B_Conf        0x01
+//   #define    LM75B_Temp        0x00
+//   #define    LM75B_Tos         0x03
+//   #define    LM75B_Thyst       0x02
+//
+//   /*
+//	* I2C frequency - 400 400 khz - FAST I2C  ( CAN ALSO USE 100000  for 100Khz - SLOW I2C )
+//	*/
+//   #define LM75B_I2C_FREQ 400000
+//
+//   /*
+//	* Using I2CD2
+//	* I2C2_SDA PB10
+//	* I2C2_SCL PB11
+//	*/
+//   #define LM75B_BUS_I2C I2CD2
+//
+//
+//
+//	char cmd_send[2];
+//	char cmd_receive[2];
+//
+//	float a=0;
 
   /* USER CODE BEGIN Task04 */
   /* Infinite loop */
   for(;;)
   {
-		cmd_send[0]= 0;
-		cmd_send[1]= 0;
-
-		cmd_receive[0]=0;
-		cmd_receive[1]=0;
-
-		HAL_I2C_Master_Transmit(&hi2c2,LM75B_ADDR<<1,cmd_send,2,100);
-		HAL_I2C_Master_Receive(	&hi2c2,LM75B_ADDR<<1,cmd_receive,2,100);
-
-		uint16_t bufferint = (cmd_receive[1] | (cmd_receive[0]<<8))>>5;
-		if (bufferint > 2048 ) bufferint = (bufferint & 1111111111) | 100000000000000 ;// Test senza 2^11 con 2^15  ( sposto l'1 in avanti)
-		a = (float)bufferint * 0.125;
-
-//		memset(buf,' ' , 45); // ,sizeof(buf));
-//		sprintf(buf,"Temperature: %d - %d \r\n" ,cmd_receive[0] , cmd_receive[1]); // %f  \n" ,a); //cmd_receive[0],(cmd_receive[1]/128)*5);
-//		HAL_UART_Transmit( &huart3,buf,sizeof(buf),100);
-
-		memset(buf2,' ' ,sizeof(buf));
-		char buffer[16];
-		sprintf(buffer,"FLOAT %.3f \n\r" , a); // %f  \n" ,a); //cmd_receive[0],(cmd_receive[1]/128)*5);
-		HAL_UART_Transmit( &huart3,buffer,sizeof(buffer),100);
-
-	//		osDelay(100);
-	//		HAL_Delay(500);
-
-		//HAL_UART_Transmit( &huart3,"\n", 2,100);
-
+	  Termometro1.printTemp();
+//		cmd_send[0]= LM75B_Temp;
+//		cmd_send[1]= 0;
+//
+//		cmd_receive[0]=0;
+//		cmd_receive[1]=0;
+//
+//		HAL_I2C_Master_Transmit(&hi2c2,LM75B_ADDR<<1,cmd_send,2,100);
+//		HAL_I2C_Master_Receive(	&hi2c2,LM75B_ADDR<<1,cmd_receive,2,100);
+//
+//		uint16_t bufferint = (cmd_receive[1] | (cmd_receive[0]<<8))>>5;
+//		if (bufferint > 2047 ) bufferint = (bufferint & 1111111111) | 100000000000000 ;// Test senza 2^11 con 2^15  ( sposto l'1 in avanti)
+//		a = (float)bufferint * 0.125;
+//
+//
+//		//		char Messaggio[]= " - FEES SYSTEM TESTING - \n\r";
+//		//		HAL_UART_Transmit( &huart3,Messaggio,strlen(Messaggio),100);
+//
+//		char buffer[50];
+//		int buffer_len = sprintf(buffer,"Temperatura :  %.3f \n\r\n\n" , a); // %f  \n" ,a); //cmd_receive[0],(cmd_receive[1]/128)*5);
+//		HAL_UART_Transmit( &huart3,buffer,buffer_len,100);
+//
+//	//		osDelay(100);
+//	//		HAL_Delay(500);
+//
+//		//HAL_UART_Transmit( &huart3,"\n", 2,100);
+//
 
 	// 00000000 // 00000000
 	osDelay(100);
